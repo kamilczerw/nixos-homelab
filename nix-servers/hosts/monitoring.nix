@@ -17,12 +17,6 @@ in
     allowedTCPPorts = [ 22 80 443 2342 9001 9002 9090 ];
   };
 
-  networking.interfaces.ens19.ipv4.routes = [{
-    address = "10.10.0.0";
-    prefixLength = 16;
-    via = "10.10.12.100";
-  }];
-
   services.tailscale.enable = true;
 
   services.grafana.enable = true;
@@ -45,26 +39,11 @@ in
     };
     scrapeConfigs = [
       {
-        job_name = "Heart";
+        job_name = "Proxmox Nodes";
         static_configs = [{
           targets = [ 
-            heart-of-gold.mora-mirzam.ts.net:9100
-          ];
-        }];
-      }
-      {
-        job_name = "Cubi";
-        static_configs = [{
-          targets = [ 
-            cubi.mora-mirzam.ts.net:9100
-          ];
-        }];
-      }
-      {
-        job_name = "Cagefree";
-        static_configs = [{
-          targets = [ 
-            cagefree.mora-mirzam.ts.net:9100
+            pve-01.internal
+            pve-02.internal
           ];
         }];
       }
@@ -94,5 +73,5 @@ in
     };
   };
 
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
 }

@@ -86,7 +86,7 @@ The last line of the shell output will be a path in your nix store. Upload this 
 
 To update an already deployed VM, from the `nix-servers` directory, run:
 ```bash
-nixos-rebuild --target-host=<user>@<hostname-or-ip> --flake .#<host>
+nixos-rebuild --target-host=<user>@<hostname-or-ip> --flake .#<host> --use-remote-sudo
 ```
 You can also use the `--build-host` flag to specify which host to build on (by default it will use the host you are running the commands from)
 
