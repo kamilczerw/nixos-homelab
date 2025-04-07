@@ -1,0 +1,27 @@
+- name: Build and Upload NixOS Image
+  hosts: nodes
+  vars:
+    current_date: "{{ ansible_date_time.date }}"
+    flake_name: "{{ flake | default('vm') }}"
+  tasks:
+    - name: create iso
+      ansible.builtin.shell: nix build .#{{ flake_name }}
+      args:
+        chdir: "{{ playbook_dir }}/../../nix-servers"
+      delegate_to: localhost
+      run_once: true
+
+    - name: copy the backup
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "/var/lib/vz/dump/"
+      with_fileglob:
+        - "../nix-servers/result/*.zst"
+
+    - name: remove build result
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/../nix-servers/result"
+        state: absent
+      delegate_to: localhost
+      run_once: true
+

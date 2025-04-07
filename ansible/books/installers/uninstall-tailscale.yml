@@ -1,0 +1,6 @@
+- name: Uninstall Tailscale
+  hosts: all
+  roles:
+    - role: artis3n.tailscale
+      vars:
+        state: absent

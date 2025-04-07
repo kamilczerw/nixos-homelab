@@ -1,0 +1,25 @@
+- name: Bootstrap Proxmox Backup Server
+  hosts: pbs
+  become: true
+
+  pre_tasks:
+    - name: Remove enterprise repo list
+      file:
+        path: /etc/apt/sources.list.d/pbs-enterprise.list
+        state: absent
+    - name: Add community repository
+      ansible.builtin.apt_repository:
+        repo: deb http://download.proxmox.com/debian/pbs bookworm pbs-no-subscription
+        state: present
+
+  tasks:
+    - name: Upgrade
+      tags: upgrade
+      ansible.builtin.apt:
+        upgrade: dist
+
+  roles:
+    - role: artis3n.tailscale
+      vars:
+        tailscale_up_skip: true
+    - prometheus.prometheus.node_exporter

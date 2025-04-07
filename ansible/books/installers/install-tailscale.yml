@@ -1,0 +1,35 @@
+- name: Install Tailscale (Interactive)
+  hosts: all
+  vars_prompt:
+    - name: auth_key
+      prompt: Tailscale Auth Key
+      private: false
+    - name: accept_dns
+      prompt: Accept DNS?
+      default: true
+      private: false
+    - name: advertise_routes
+      prompt: Advertise routes?
+      private: false
+    - name: accept_routes
+      prompt: Accept routes?
+      default: false
+      private: false
+    - name: enable_ssh
+      prompt: Enable Tailscale SSH?
+      default: false
+      private: false
+  vars:
+    tailscale_args: >
+      {% set args = [] %}
+      {% if accept_routes | bool %}--accept-routes{% endif %}
+      {% if enable_ssh | bool %}--ssh{% endif %}
+      {% if accept_dns | bool %}--accept-dns{% else %}--accept-dns=false{% endif %}
+      {% if advertise_routes %}--advertise-routes={{ advertise_routes }}{% endif %}
+      --reset
+      {{ args | join(' ') }}
+
+  roles:
+    - role: artis3n.tailscale
+      vars:
+        tailscale_authkey: "{{ auth_key }}"

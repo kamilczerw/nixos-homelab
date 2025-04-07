@@ -1,0 +1,5 @@
+---
+roles:
+  - name: artis3n.tailscale
+collections:
+  - name: prometheus.prometheus

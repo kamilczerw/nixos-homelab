@@ -1,0 +1,5 @@
+---
+- name: Install proxmox node exporter
+  hosts: all
+  roles:
+    - prometheus.prometheus.node_exporter
